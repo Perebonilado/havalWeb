@@ -12,12 +12,23 @@ export const UploadChoiceData: UploadChoice[] = [
     title: "Audio",
     path: "/upload/audio",
     icon: <AudioFile sx={{ fill: "#42a5f5", fontSize: 35 }} />,
-    isActive: true
+    isActive: false
   },
   {
     title: "Video",
     path: "/upload/video",
     icon: <AudioFile sx={{ fill: "#42a5f5", fontSize: 35 }} />,
-    isActive: true
+    isActive: false
   },
 ];
+
+export const allowedBookGenres: string[] = [
+    "religion",
+    "drama",
+    "fiction",
+    "non-fiction",
+    "health",
+    "comedy",
+    "romance",
+  ];
+  

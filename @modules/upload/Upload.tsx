@@ -12,7 +12,7 @@ const Upload: FC = () => {
       <Grid container wrap="wrap" spacing={5}>
         {UploadChoiceData.map((data, idx) => {
           return data.isActive ? (
-            <Grid item>
+            <Grid item key={idx}>
               <UploadChoice
                 key={idx}
                 icon={data.icon}
@@ -21,7 +21,7 @@ const Upload: FC = () => {
               />
             </Grid>
           ) : (
-            <></>
+            null
           );
         })}
       </Grid>
