@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useRouter } from "next/router";
 
 import { Box } from "@mui/material";
 
@@ -14,8 +15,11 @@ interface Props {
 }
 
 const Book: FC<Props> = ({ title, author, coverUrl, id, amount }) => {
+  
+  const router = useRouter()
+
   return (
-    <Box sx={{ width: "103px", cursor: "pointer",}}>
+    <Box sx={{ width: "103px", cursor: "pointer",}} onClick={()=>router.push(`/books/${id}`)}>
       <Bookcover coverUrl={coverUrl} />
       <BookInfo title={title} author={author} id={id} amount={amount}/>
     </Box>

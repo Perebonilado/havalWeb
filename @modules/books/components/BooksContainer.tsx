@@ -1,6 +1,8 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
-import { Grid, Pagination, Box, Typography } from "@mui/material";
+import { Grid, Pagination, Box, Typography, Button } from "@mui/material";
+
+import { toast } from "react-toastify";
 
 import Book from "./Book";
 import SkeletonLoader from "./SkeletonLoader";
@@ -22,6 +24,10 @@ const BooksContainer: FC = () => {
   const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    if (isError) toast.error("Oops! Error Fetching Book");
+  }, [isError]);
 
   return (
     <Box>
@@ -61,6 +67,14 @@ const BooksContainer: FC = () => {
             <SkeletonLoader />
           </Grid>
         </Grid>
+      )}
+
+      {!data && !isLoading && isError && (
+        <Box sx={{ paddingTop: 5 }}>
+          <Button variant="contained" sx={{ display: "block", margin: "auto" }} onClick={refetch}>
+            Reload
+          </Button>
+        </Box>
       )}
 
       {data && data.totalPageCount >= 1 && (

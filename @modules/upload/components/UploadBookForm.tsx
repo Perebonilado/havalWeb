@@ -69,7 +69,6 @@ const UploadBookForm: FC = () => {
         ...values,
         releaseDate: releaseDate.toISOString().replace('Z', ''),
       };
-      console.log(releaseDate.toISOString().replace('Z', ''))
       const formData = new FormData();
       for (let key in uploadData) {
         formData.append(key, uploadData[key]);
