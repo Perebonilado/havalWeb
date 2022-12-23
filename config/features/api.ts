@@ -11,6 +11,7 @@ import {
   GetMerchantsBooksResponse,
   GetMerchantsBookQuery,
 } from "../../@types/Book";
+import { UploadBookPayload, UploadBookResponse } from "../../@types/Upload";
 
 export const api = createApi({
   reducerPath: "haval-api",
@@ -37,11 +38,26 @@ export const api = createApi({
       query: ({ page, perPage, token }) => ({
         url: `books/retrieve-all-merchant-books?perPage=${perPage}&page=${page}`,
         headers: {
-            Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    uploadBook: builder.mutation<UploadBookResponse, UploadBookPayload>({
+      query: ({ data, token }) => ({
+        url: "books/upload-book",
+        method: "POST",
+        body: data,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
     }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useGetMerchantBooksQuery } = api;
+export const {
+  useLoginMutation,
+  useSignupMutation,
+  useGetMerchantBooksQuery,
+  useUploadBookMutation,
+} = api;

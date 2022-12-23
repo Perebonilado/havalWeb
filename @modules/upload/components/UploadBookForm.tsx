@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import {
   Box,
@@ -9,7 +10,7 @@ import {
   Typography,
   styled,
   Button,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 
 import { useFormik, FormikProvider, Form } from "formik";
@@ -25,7 +26,7 @@ import {
 } from "../constants";
 import UploadFileButton from "./UploadFileButton";
 import useToken from "../../../hooks/useToken";
-
+import { useUploadBookMutation } from "../../../config/features/api";
 
 const initalValues = {
   title: "",
@@ -51,7 +52,10 @@ const UploadBookForm: FC = () => {
   const [book, setBook] = useState<File | null>(null);
   const [releaseDate, setReleaseDate] = useState<Date>(new Date());
   const [amount, setAmount] = useState<string>("");
-  const token = useToken()
+  const { token } = useToken();
+  const [uploadBook, { data, isSuccess, isError, isLoading }] =
+    useUploadBookMutation();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: initalValues,
@@ -63,19 +67,33 @@ const UploadBookForm: FC = () => {
     if (book && bookCover && releaseDate) {
       const uploadData: any = {
         ...values,
-        releaseDate: releaseDate.toISOString(),
+        releaseDate: releaseDate.toISOString().replace('Z', ''),
       };
+      console.log(releaseDate.toISOString().replace('Z', ''))
       const formData = new FormData();
       for (let key in uploadData) {
         formData.append(key, uploadData[key]);
       }
       formData.append("book", book);
       formData.append("book_cover", bookCover);
+      uploadBook({ token: token, data: formData });
     } else toast.error("Ensure all fields are filled and Uploads are done");
   };
+
   useEffect(() => {
     formik.setFieldValue("amount", amount);
   }, [amount]);
+
+  useEffect(() => {
+    if (isError) toast.error("Error uploading book, please try again");
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Book successfully uploaded");
+      router.push("/books");
+    }
+  }, [isSuccess]);
 
   return (
     <Box
@@ -231,8 +249,9 @@ const UploadBookForm: FC = () => {
                 size="small"
                 sx={{ display: "block", margin: "auto" }}
                 type="submit"
+                disabled={isLoading || !book || !bookCover || !releaseDate}
               >
-                Upload Book
+                {isLoading ? <CircularProgress size={15}/> : "Upload Book"}
               </Button>
             </Box>
           </Stack>
