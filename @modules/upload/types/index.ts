@@ -4,3 +4,4 @@ export interface UploadChoice {
   path: string;
   isActive: boolean;
 }
+

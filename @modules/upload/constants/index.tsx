@@ -31,4 +31,15 @@ export const allowedBookGenres: string[] = [
     "comedy",
     "romance",
   ];
+
+export const allowedBookCoverMimeTypes = [
+  "image/png",
+  "image/jpeg"
+]
+
+export const allowedBookMimeTypes = [
+  "application/pdf"
+]
+
+export const fileSizeConversionRate=1024
   
