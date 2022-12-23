@@ -6,12 +6,10 @@ import { Box, TextField, Button, CircularProgress } from "@mui/material";
 import { useFormik, FormikProvider, Form } from "formik";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
 
 import { loginValidation } from "../../../models/auth";
 import { useLoginMutation } from "../../../config/features/api";
 import { AUTH_TOKEN } from "../../../@shared/constants";
-import { handlePopulateUserInfo } from "../../../config/features/userInfo";
 
 const initialValues = {
   email: "",
@@ -22,7 +20,6 @@ const SignInForm: FC = () => {
 
   const [login, { isLoading, data, error, isSuccess }] = useLoginMutation();
 
-  const dispatch = useDispatch()
   const router = useRouter()
 
   const formik = useFormik({
@@ -39,10 +36,6 @@ const SignInForm: FC = () => {
     if (isSuccess && data) {
       toast.success("Login Successful");
       Cookies.set(`${AUTH_TOKEN}`, data.token, { expires: 1 });
-      dispatch(handlePopulateUserInfo({
-        profilePicture: data.profilePicture,
-        username: data.username,
-      }));
       router.push("/")
     }
   }, [isSuccess]);

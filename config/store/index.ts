@@ -2,13 +2,11 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import sideBarReducer from "../features/sidebar"
 import { api } from "../features/api"
-import userInfoReducer from "../features/userInfo"
 
 
 export const store = configureStore({
     reducer: {
         sideBar: sideBarReducer,
-        userInfo: userInfoReducer,
         [api.reducerPath]: api.reducer
     },
     middleware: (getDefaultMiddleware)=>

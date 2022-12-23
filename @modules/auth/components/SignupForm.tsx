@@ -6,12 +6,10 @@ import { Box, TextField, Button, CircularProgress } from "@mui/material";
 import { useFormik, FormikProvider, Form } from "formik";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
 
 import { signupValidation } from "../../../models/auth";
 import { useSignupMutation } from "../../../config/features/api";
 import { AUTH_TOKEN } from "../../../@shared/constants";
-import { handlePopulateUserInfo } from "../../../config/features/userInfo";
 
 const initialValues = {
   firstName: "",
@@ -27,7 +25,6 @@ const SignupForm: FC = () => {
     useState<boolean>(false);
   const [confirmPasswordValue, setConfirmPasswordValue] = useState<string>("");
 
-  const dispatch = useDispatch();
   const router = useRouter()
 
   const formik = useFormik({
@@ -44,10 +41,6 @@ const SignupForm: FC = () => {
     if (isSuccess && data) {
       toast.success("Account successfully created!");
       Cookies.set(`${AUTH_TOKEN}`, data.token);
-      dispatch(handlePopulateUserInfo({
-        profilePicture: data.profilePicture,
-        username: data.username,
-      }));
       router.push("/")
     }
   }, [isSuccess]);

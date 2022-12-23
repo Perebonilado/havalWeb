@@ -6,8 +6,6 @@ export interface LoginPayload {
 export interface LoginResponse {
   message: string;
   token: string;
-  username: string;
-  profilePicture: string;
 }
 
 export interface SignupPayload {
@@ -20,8 +18,6 @@ export interface SignupPayload {
 }
 
 export interface SignupResponse {
-  profilePicture: string;
   message: string;
   token: string;
-  username: string;
 }
