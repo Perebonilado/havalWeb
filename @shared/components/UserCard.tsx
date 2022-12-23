@@ -4,16 +4,18 @@ import { Card, Avatar, Typography, Popover, Button, Box } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 
 import Cookies from "js-cookie"
-import { useSelector } from "react-redux";
 
 import { AUTH_TOKEN } from "../../@shared/constants"
-import { RootState } from "../../config/store";
+import useToken from "../../hooks/useToken";
+import { useGetUserProfileQuery } from "../../config/features/api"
 
 const UserCard: FC = () => {
   
+  const { token } = useToken()
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
-
-  const { profilePicture, username } = useSelector((state: RootState) => state.userInfo)
+  const { data } = useGetUserProfileQuery(token, {
+    skip: !token
+  })
 
   const handleClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     setAnchorEl(e.currentTarget);
@@ -49,12 +51,12 @@ const UserCard: FC = () => {
         >
           <Avatar
             alt="profile picture"
-            src={profilePicture}
+            src={data?.data.profilePictureURL}
             sx={{ width: 20, height: 20, bgcolor: "#1976d2" }}
           >
-            {!profilePicture && username[0]}
+            {data?.data.username || ""}
           </Avatar>
-          <Typography>{username}</Typography>
+          <Typography>{data?.data.username}</Typography>
         </Box>
         <Box>
           <MoreVert onClick={(e) => handleClick(e)} />

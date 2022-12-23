@@ -12,6 +12,7 @@ import {
   GetMerchantsBookQuery,
 } from "../../@types/Book";
 import { UploadBookPayload, UploadBookResponse } from "../../@types/Upload";
+import { GetUserProfileResponse } from "../../@types/User";
 
 export const api = createApi({
   reducerPath: "haval-api",
@@ -52,6 +53,14 @@ export const api = createApi({
         },
       }),
     }),
+    getUserProfile: builder.query<GetUserProfileResponse, string>({
+      query: (token) => ({
+        url: "user/profile-info",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -60,4 +69,5 @@ export const {
   useSignupMutation,
   useGetMerchantBooksQuery,
   useUploadBookMutation,
+  useGetUserProfileQuery
 } = api;
