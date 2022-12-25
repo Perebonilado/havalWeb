@@ -2,13 +2,27 @@ import React, { FC } from "react";
 
 import { Box } from "@mui/material";
 
+import { customImageHeightPx, customImageWidthPx } from "../utils/constants";
+
 interface Props {
   coverUrl: string;
+  size?: "small" | "medium" | "large";
 }
 
-const Bookcover: FC<Props> = ({ coverUrl }) => {
+const Bookcover: FC<Props> = ({ coverUrl, size = "small" }) => {
+  const imageSizeMultiple = {
+    small: 1,
+    medium: 3,
+    large: 5,
+  };
+
   return (
-    <Box sx={{ width: "103px", height: "160px", marginBottom: "8px" }}>
+    <Box
+      sx={{
+        width: `${imageSizeMultiple[size] * customImageWidthPx}px`,
+        height: `${imageSizeMultiple[size] * customImageHeightPx}px`,
+      }}
+    >
       <img
         style={{
           objectFit: "cover",
