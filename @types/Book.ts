@@ -26,3 +26,35 @@ export interface GetMerchantsBooksResponse {
   page: number;
   totalPageCount: number;
 }
+
+export interface GetBookByIdQuery {
+  token: string;
+  id: string;
+}
+
+export interface GetBookByIdResponse {
+  message: string;
+  data: [
+    {
+      _id: string;
+      title: string;
+      author: string;
+      bookUrl: string;
+      coverImageUrl: string;
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        username: string;
+        profilePictureURL: string;
+      };
+      releaseDate: Date | string;
+      rating: number;
+      purchaseCount: number;
+      amount: number;
+      genre: string;
+      description: string;
+      __v: number;
+    }
+  ];
+}

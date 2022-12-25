@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 
 import Layout from "../../layout";
+import SpecificBookDetails from "../../@modules/books/components/SpecificBookDetails";
 
 const Book: FC = () => {
-  return <Layout>A specifit book based on id</Layout>;
+  return <Layout><SpecificBookDetails /></Layout>;
 };
 
 export default Book;

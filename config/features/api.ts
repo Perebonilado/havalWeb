@@ -10,6 +10,8 @@ import {
 import {
   GetMerchantsBooksResponse,
   GetMerchantsBookQuery,
+  GetBookByIdQuery,
+  GetBookByIdResponse,
 } from "../../@types/Book";
 import { UploadBookPayload, UploadBookResponse } from "../../@types/Upload";
 import { GetUserProfileResponse } from "../../@types/User";
@@ -61,6 +63,14 @@ export const api = createApi({
         },
       }),
     }),
+    getBookById: builder.query<GetBookByIdResponse, GetBookByIdQuery>({
+      query: ({ token, id }) => ({
+        url: `books/retrieve-one-merchant-book/${id}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -69,5 +79,6 @@ export const {
   useSignupMutation,
   useGetMerchantBooksQuery,
   useUploadBookMutation,
-  useGetUserProfileQuery
+  useGetUserProfileQuery,
+  useGetBookByIdQuery
 } = api;
