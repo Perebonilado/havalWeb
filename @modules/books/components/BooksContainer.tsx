@@ -36,19 +36,25 @@ const BooksContainer: FC = () => {
       </Typography>
       {data && !isLoading && !isError && (
         <Grid container spacing={6} wrap="wrap">
-          {data?.data.map((book) => {
-            return (
-              <Grid item key={book._id}>
-                <Book
-                  author={book.author}
-                  title={book.title}
-                  id={book._id}
-                  coverUrl={book.coverImageUrl}
-                  amount={book.amount}
-                />
-              </Grid>
-            );
-          })}
+          {data.data.length > 0 ? (
+            data.data.map((book) => {
+              return (
+                <Grid item key={book._id}>
+                  <Book
+                    author={book.author}
+                    title={book.title}
+                    id={book._id}
+                    coverUrl={book.coverImageUrl}
+                    amount={book.amount}
+                  />
+                </Grid>
+              );
+            })
+          ) : (
+            <Grid item>
+              <Typography>You are yet to upload any books</Typography>
+            </Grid>
+          )}
         </Grid>
       )}
 
@@ -71,7 +77,11 @@ const BooksContainer: FC = () => {
 
       {!data && !isLoading && isError && (
         <Box sx={{ paddingTop: 5 }}>
-          <Button variant="contained" sx={{ display: "block", margin: "auto" }} onClick={refetch}>
+          <Button
+            variant="contained"
+            sx={{ display: "block", margin: "auto" }}
+            onClick={refetch}
+          >
             Reload
           </Button>
         </Box>
