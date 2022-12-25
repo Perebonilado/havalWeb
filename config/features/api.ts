@@ -15,6 +15,7 @@ import {
 } from "../../@types/Book";
 import { UploadBookPayload, UploadBookResponse } from "../../@types/Upload";
 import { GetUserProfileResponse } from "../../@types/User";
+import { GenerateTokenQuery, GenerateTokenResponse } from "../../@types/Token"
 
 export const api = createApi({
   reducerPath: "haval-api",
@@ -71,6 +72,15 @@ export const api = createApi({
         },
       }),
     }),
+    generateSalesToken: builder.mutation<GenerateTokenResponse, GenerateTokenQuery>({
+      query: ({token, id})=>({
+        url: `sales-token/generate/${id}`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    })
   }),
 });
 
@@ -80,5 +90,6 @@ export const {
   useGetMerchantBooksQuery,
   useUploadBookMutation,
   useGetUserProfileQuery,
-  useGetBookByIdQuery
+  useGetBookByIdQuery,
+  useGenerateSalesTokenMutation
 } = api;
