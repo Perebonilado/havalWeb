@@ -10,19 +10,26 @@ import {
   Stack,
   Rating,
   DialogTitle,
-  TextField
+  TextField,
 } from "@mui/material";
-import { CheckCircle } from "@mui/icons-material"
+import { CheckCircle } from "@mui/icons-material";
 
 import { toast } from "react-toastify";
+import { useFormik, Form, FormikProvider } from "formik";
 
 import {
   useGetBookByIdQuery,
   useGenerateSalesTokenMutation,
+  useSendTokenViaEmailMutation,
 } from "../../../config/features/api";
 import useToken from "../../../hooks/useToken";
 import Bookcover from "./Bookcover";
 import Modal from "../../../@shared/components/Modal";
+import { sendTokenViaEmailValidations } from "../../../models/book";
+
+const initialValues = {
+  email: "",
+};
 
 const SpecificBookDetails: FC = () => {
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -47,10 +54,46 @@ const SpecificBookDetails: FC = () => {
       isSuccess: isSalesTokenSuccess,
     },
   ] = useGenerateSalesTokenMutation();
+  const [
+    sendTokenEmail,
+    {
+      data: tokenEmailData,
+      isLoading: tokenEmailLoading,
+      isError: isTokenEmailError,
+      error: tokenEmailError,
+      isSuccess: tokenEmailSuccess,
+    },
+  ] = useSendTokenViaEmailMutation();
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: sendTokenViaEmailValidations,
+    onSubmit: (values) => handleSendTokenEmail({ email: values.email }),
+  });
 
   const handleCloseModal = () => {
     setIsModal(false);
   };
+
+  const handleSendTokenEmail = ({ email }: { email: string }) => {
+    if (tokenData && token) {
+      const body = {
+        assetName: tokenData.data.bookTitle,
+        email: email,
+        token: tokenData.data.token,
+        auth_token: token,
+      };
+      sendTokenEmail(body);
+    }
+  };
+
+  useEffect(() => {
+    if (tokenEmailSuccess) {
+      handleCloseModal();
+      toast.success("Email sent successfully");
+      formik.resetForm()
+    }
+  }, [tokenEmailSuccess]);
 
   useEffect(() => {
     if (isSalesTokenError) toast.error("Oops! Error generating token");
@@ -58,25 +101,44 @@ const SpecificBookDetails: FC = () => {
 
   useEffect(() => {
     if (isSalesTokenSuccess) {
-      toast.success("Token Generated Succesfully")
-      setIsModal(true)
-      refetch()
+      setIsModal(true);
+      refetch();
     }
   }, [isSalesTokenSuccess]);
 
   return (
     <>
-    <Modal open={isModal} handleClose={handleCloseModal}>
-      <Stack spacing={1} sx={{padding: 2}}>
-        <CheckCircle sx={{fill: "green", fontSize:40, display: "block", margin: "auto"}}/>
-        <DialogTitle>Token Generation Successful</DialogTitle>
-        <Typography fontWeight={700} align="center" marginBottom={1}>
-          {tokenData?.data.token}
-        </Typography>
-        <TextField label="email" size="small"/>
-        <Button variant="outlined" size="small">Share</Button>
-      </Stack>
-    </Modal>
+      <Modal open={isModal} handleClose={handleCloseModal}>
+        <FormikProvider value={formik}>
+          <Form>
+            <Stack spacing={1} sx={{ padding: 2 }}>
+              <CheckCircle
+                sx={{
+                  fill: "green",
+                  fontSize: 40,
+                  display: "block",
+                  margin: "auto",
+                }}
+              />
+              <DialogTitle>Token Generation Successful</DialogTitle>
+              <Typography fontWeight={700} align="center" marginBottom={1}>
+                {tokenData?.data.token}
+              </Typography>
+
+              <TextField
+                label="email"
+                size="small"
+                {...formik.getFieldProps("email")}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+              />
+              <Button variant="outlined" size="small" type="submit">
+                {tokenEmailLoading ? <CircularProgress size={15} /> : "Share"}
+              </Button>
+            </Stack>
+          </Form>
+        </FormikProvider>
+      </Modal>
       <Box>
         {!isLoading && !isError && data && (
           <Grid container spacing={3} wrap="wrap">

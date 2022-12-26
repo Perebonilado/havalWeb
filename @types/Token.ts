@@ -14,3 +14,14 @@ export interface GenerateTokenQuery {
     token: string;
     id: string;
 }
+
+export interface SendTokenViaEmailQuery {
+  auth_token: string;
+  assetName: string;
+  token: string;
+  email: string;
+}
+
+export interface SendTokenViaEmailResponse {
+  message: string; 
+}
