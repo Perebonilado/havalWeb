@@ -18,7 +18,7 @@ import { GetUserProfileResponse } from "../../@types/User";
 import {
   GenerateTokenQuery,
   GenerateTokenResponse,
-  SendTokenViaEmailQuery,
+  SendTokenViaEmailPayload,
   SendTokenViaEmailResponse,
 } from "../../@types/Token";
 
@@ -91,7 +91,7 @@ export const api = createApi({
     }),
     sendTokenViaEmail: builder.mutation<
       SendTokenViaEmailResponse,
-      SendTokenViaEmailQuery
+      SendTokenViaEmailPayload
     >({
       query: ({ auth_token, token, assetName, email }) => ({
         url: "sales-token/send-token-email",

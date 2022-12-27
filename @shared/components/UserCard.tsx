@@ -54,7 +54,7 @@ const UserCard: FC = () => {
             src={data?.data.profilePictureURL}
             sx={{ width: 20, height: 20, bgcolor: "#1976d2" }}
           >
-            {data?.data.username || ""}
+            {data && Array.from(data.data.username)[0] || ""}
           </Avatar>
           <Typography>{data?.data.username}</Typography>
         </Box>

@@ -15,11 +15,12 @@ export interface GenerateTokenQuery {
     id: string;
 }
 
-export interface SendTokenViaEmailQuery {
+export interface SendTokenViaEmailPayload {
   auth_token: string;
   assetName: string;
   token: string;
   email: string;
+  assetImage: string
 }
 
 export interface SendTokenViaEmailResponse {

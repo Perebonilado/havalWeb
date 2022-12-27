@@ -26,6 +26,7 @@ import useToken from "../../../hooks/useToken";
 import Bookcover from "./Bookcover";
 import Modal from "../../../@shared/components/Modal";
 import { sendTokenViaEmailValidations } from "../../../models/book";
+import { SendTokenViaEmailPayload } from "../../../@types/Token"
 
 const initialValues = {
   email: "",
@@ -76,12 +77,13 @@ const SpecificBookDetails: FC = () => {
   };
 
   const handleSendTokenEmail = ({ email }: { email: string }) => {
-    if (tokenData && token) {
-      const body = {
+    if (tokenData && token && data) {
+      const body:SendTokenViaEmailPayload = {
         assetName: tokenData.data.bookTitle,
         email: email,
         token: tokenData.data.token,
         auth_token: token,
+        assetImage: data.data[0].coverImageUrl
       };
       sendTokenEmail(body);
     }
@@ -91,13 +93,16 @@ const SpecificBookDetails: FC = () => {
     if (tokenEmailSuccess) {
       handleCloseModal();
       toast.success("Email sent successfully");
-      formik.resetForm()
+      formik.resetForm();
     }
   }, [tokenEmailSuccess]);
 
   useEffect(() => {
-    if (isSalesTokenError) toast.error("Oops! Error generating token");
-  }, [isSalesTokenError]);
+    if (salesTokenError) {
+      const { data }: any = salesTokenError;
+      toast.error(data?.message);
+    }
+  }, [salesTokenError]);
 
   useEffect(() => {
     if (isSalesTokenSuccess) {
@@ -132,7 +137,12 @@ const SpecificBookDetails: FC = () => {
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
               />
-              <Button variant="outlined" size="small" type="submit">
+              <Button
+                variant="outlined"
+                size="small"
+                type="submit"
+                disabled={tokenEmailLoading}
+              >
                 {tokenEmailLoading ? <CircularProgress size={15} /> : "Share"}
               </Button>
             </Stack>

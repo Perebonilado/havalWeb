@@ -26,7 +26,7 @@ const BooksContainer: FC = () => {
   };
 
   useEffect(() => {
-    if (isError) toast.error("Oops! Error Fetching Book");
+    if (isError) toast.error("Oops! Error Fetching Books");
   }, [isError]);
 
   return (
