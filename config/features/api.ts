@@ -20,6 +20,8 @@ import {
   GenerateTokenResponse,
   SendTokenViaEmailPayload,
   SendTokenViaEmailResponse,
+  GetUnusedTokenResponse,
+  GetUnusedTokensQuery
 } from "../../@types/Token";
 
 export const api = createApi({
@@ -93,15 +95,23 @@ export const api = createApi({
       SendTokenViaEmailResponse,
       SendTokenViaEmailPayload
     >({
-      query: ({ auth_token, token, assetName, email }) => ({
+      query: ({ auth_token, token, assetName, email, assetImage }) => ({
         url: "sales-token/send-token-email",
         method: "POST",
-        body: { token, assetName, email },
+        body: { token, assetName, email, assetImage },
         headers: {
           Authorization: `Bearer ${auth_token}`,
         },
       }),
     }),
+    getUnusedTokens: builder.query<GetUnusedTokenResponse, GetUnusedTokensQuery>({
+      query: ({asset_id, asset_type, auth_token})=>({
+        url: `sales-token/get-unused-tokens?asset_type=${asset_type}&asset_id=${asset_id}`,
+        headers: {
+          Authorization: `Bearer ${auth_token}`
+        }
+      })
+    })
   }),
 });
 
@@ -113,5 +123,6 @@ export const {
   useGetUserProfileQuery,
   useGetBookByIdQuery,
   useGenerateSalesTokenMutation,
-  useSendTokenViaEmailMutation
+  useSendTokenViaEmailMutation,
+  useGetUnusedTokensQuery
 } = api;

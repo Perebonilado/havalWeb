@@ -26,7 +26,8 @@ import useToken from "../../../hooks/useToken";
 import Bookcover from "./Bookcover";
 import Modal from "../../../@shared/components/Modal";
 import { sendTokenViaEmailValidations } from "../../../models/book";
-import { SendTokenViaEmailPayload } from "../../../@types/Token"
+import { SendTokenViaEmailPayload } from "../../../@types/Token";
+import UnusedTokenTable from "./UnusedTokenTable";
 
 const initialValues = {
   email: "",
@@ -78,12 +79,12 @@ const SpecificBookDetails: FC = () => {
 
   const handleSendTokenEmail = ({ email }: { email: string }) => {
     if (tokenData && token && data) {
-      const body:SendTokenViaEmailPayload = {
+      const body: SendTokenViaEmailPayload = {
         assetName: tokenData.data.bookTitle,
         email: email,
         token: tokenData.data.token,
         auth_token: token,
-        assetImage: data.data[0].coverImageUrl
+        assetImage: data.data[0].coverImageUrl,
       };
       sendTokenEmail(body);
     }
@@ -237,6 +238,7 @@ const SpecificBookDetails: FC = () => {
           </Box>
         )}
       </Box>
+      <UnusedTokenTable asset_id={String(id)} auth_token={token} />
     </>
   );
 };

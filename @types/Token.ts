@@ -11,8 +11,8 @@ export interface GenerateTokenResponse {
 }
 
 export interface GenerateTokenQuery {
-    token: string;
-    id: string;
+  token: string;
+  id: string;
 }
 
 export interface SendTokenViaEmailPayload {
@@ -20,9 +20,34 @@ export interface SendTokenViaEmailPayload {
   assetName: string;
   token: string;
   email: string;
-  assetImage: string
+  assetImage: string;
 }
 
 export interface SendTokenViaEmailResponse {
-  message: string; 
+  message: string;
+}
+
+export interface GetUnusedTokensQuery {
+  asset_type: "book" | "audio" | "video";
+  asset_id: string;
+  auth_token: string;
+}
+
+export interface GetUnusedTokenData {
+  _id: string;
+  user: string;
+  amount: number;
+  book: {
+    title: string;
+    coverImageUrl: string;
+  };
+  token: string;
+  sentTo: string;
+  created_at: Date;
+  __v: number;
+}
+
+export interface GetUnusedTokenResponse {
+  message: string;
+  data: GetUnusedTokenData[];
 }
