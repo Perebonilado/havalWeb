@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 
 import Layout from "../../layout";
-import SpecificBookDetails from "../../@modules/books/components/SpecificBookDetails";
+import BookView from "../../@modules/books/components/BookView";
 
 const Book: FC = () => {
-  return <Layout><SpecificBookDetails /></Layout>;
+  return <Layout><BookView /></Layout>;
 };
 
 export default Book;

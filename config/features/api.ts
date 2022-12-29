@@ -83,8 +83,8 @@ export const api = createApi({
       GenerateTokenResponse,
       GenerateTokenQuery
     >({
-      query: ({ token, id }) => ({
-        url: `sales-token/generate/${id}`,
+      query: ({ token, id, count }) => ({
+        url: `sales-token/generate/${id}?count=${count || 1}`,
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
