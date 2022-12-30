@@ -1,5 +1,5 @@
 import { Navigation } from "../@types/Navigation"
-import { Dashboard, LibraryBooks, CloudUpload } from "@mui/icons-material"
+import { Dashboard, LibraryBooks, CloudUpload, AccountBalanceWallet } from "@mui/icons-material"
 
 const NavigationItems: Navigation = [
     {
@@ -18,6 +18,13 @@ const NavigationItems: Navigation = [
       },
       {
         id: 2,
+        title: "Wallets",
+        link: "/wallets",
+        icon: <AccountBalanceWallet sx={{fill: "#1976d2"}}/>,
+        isActive: false,
+      },
+      {
+        id: 3,
         title: "Upload",
         link: "/upload",
         icon: <CloudUpload sx={{fill: "#1976d2"}}/>,

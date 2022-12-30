@@ -21,8 +21,14 @@ import {
   SendTokenViaEmailPayload,
   SendTokenViaEmailResponse,
   GetUnusedTokenResponse,
-  GetUnusedTokensQuery
+  GetUnusedTokensQuery,
 } from "../../@types/Token";
+import {
+  GetWalletInfoQuery,
+  GetWalletInfoResponse,
+  FundTokenWalletPayload,
+  FundTokenWalletResponse,
+} from "../../@types/Wallet";
 
 export const api = createApi({
   reducerPath: "haval-api",
@@ -104,14 +110,42 @@ export const api = createApi({
         },
       }),
     }),
-    getUnusedTokens: builder.query<GetUnusedTokenResponse, GetUnusedTokensQuery>({
-      query: ({asset_id, asset_type, auth_token})=>({
+    getUnusedTokens: builder.query<
+      GetUnusedTokenResponse,
+      GetUnusedTokensQuery
+    >({
+      query: ({ asset_id, asset_type, auth_token }) => ({
         url: `sales-token/get-unused-tokens?asset_type=${asset_type}&asset_id=${asset_id}`,
         headers: {
-          Authorization: `Bearer ${auth_token}`
-        }
-      })
-    })
+          Authorization: `Bearer ${auth_token}`,
+        },
+      }),
+    }),
+    getWalletInfo: builder.query<GetWalletInfoResponse, GetWalletInfoQuery>({
+      query: ({ token }) => ({
+        url: "wallet/get-wallets",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
+    fundTokenWallet: builder.mutation<
+      FundTokenWalletResponse,
+      FundTokenWalletPayload
+    >({
+      query: ({ amount, initiator, token, success_url }) => ({
+        url: "paystack-services/initialize-transaction",
+        method: "POST",
+        body: {
+          amount,
+          initiator,
+          success_url
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -124,5 +158,7 @@ export const {
   useGetBookByIdQuery,
   useGenerateSalesTokenMutation,
   useSendTokenViaEmailMutation,
-  useGetUnusedTokensQuery
+  useGetUnusedTokensQuery,
+  useGetWalletInfoQuery,
+  useFundTokenWalletMutation
 } = api;
