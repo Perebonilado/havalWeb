@@ -7,6 +7,7 @@ import TokenCounter from "./TokenCounter";
 import { useGenerateSalesTokenMutation } from "../../../config/features/api";
 import { SendTokenViaEmailPayload } from "../../../@types/Token";
 import { GetBookByIdResponse } from "../../../@types/Book";
+import PrintTokens from "./PrintTokens";
 
 interface Props {
   token: string;
@@ -55,12 +56,6 @@ const TokenGeneration: FC<Props> = ({
     }
   }, [generateTokenError]);
 
-  useEffect(() => {
-    if (isGenerateTokenSuccess) {
-      setTokenCount(1);
-    }
-  }, [isGenerateTokenSuccess]);
-
   const handleGenerateToken = () => {
     if (tokenCount > 0) {
       generateSalesToken({
@@ -73,12 +68,22 @@ const TokenGeneration: FC<Props> = ({
   return (
     <>
       {isGenerateTokenSuccess ? (
-        <SendTokenByEmailForm
-          handleSendTokenEmail={handleSendTokenEmail}
-          tokenEmailLoading={tokenEmailLoading}
-          tokenData={generateTokenData?.data[0]}
-          submitSuccess={isGenerateTokenSuccess}
-        />
+        <>
+          {tokenCount === 1 && (
+            <SendTokenByEmailForm
+              handleSendTokenEmail={handleSendTokenEmail}
+              tokenEmailLoading={tokenEmailLoading}
+              tokenData={generateTokenData?.data[0]}
+              submitSuccess={isGenerateTokenSuccess}
+            />
+          )}
+          {tokenCount > 1 && (
+            <PrintTokens
+              tokenCount={tokenCount}
+              handlePrintTokens={() => null}
+            />
+          )}
+        </>
       ) : (
         <TokenCounter
           tokenCount={tokenCount}
