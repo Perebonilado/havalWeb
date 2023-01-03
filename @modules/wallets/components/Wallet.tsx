@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
 
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 import WalletCard from "./WalletCard";
 import { useGetWalletInfoQuery } from "../../../config/features/api";
@@ -11,12 +12,16 @@ import useToken from "../../../hooks/useToken";
 import Modal from "../../../@shared/components/Modal";
 import FundWalletCard from "./FundWalletCard";
 import SkeletonWalletCard from "./SkeletonWalletCard";
+import { openDrawer } from "../../../config/features/drawer";
+import Withdrawal from "./Withdrawal";
 
 const Wallet: FC = () => {
   const { token } = useToken();
   const [isFundWallet, setIsFundWallet] = useState<boolean>(false);
   const router = useRouter()
   const { wallet_fund_success } = router.query
+
+  const dispatch = useDispatch()
 
   const {
     data: wallets,
@@ -48,6 +53,9 @@ const Wallet: FC = () => {
               bgColor="linear-gradient(135deg, rgba(108,111,255) 70%, rgba(190,191,245))"
               amount={wallets.revenueWallet.amount}
               buttonText="Withdraw"
+              handleWalletAction={()=>{
+                dispatch(openDrawer({content: <Withdrawal />}))
+              }}
             />
           </Grid>
           <Grid item>

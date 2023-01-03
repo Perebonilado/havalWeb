@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import sideBarReducer from "../features/sidebar"
+import drawerReducer from "../features/drawer"
 import { api } from "../features/api"
 
 
 export const store = configureStore({
     reducer: {
         sideBar: sideBarReducer,
+        drawer: drawerReducer,
         [api.reducerPath]: api.reducer
     },
     middleware: (getDefaultMiddleware)=>

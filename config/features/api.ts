@@ -29,6 +29,7 @@ import {
   FundTokenWalletPayload,
   FundTokenWalletResponse,
 } from "../../@types/Wallet";
+import { GetBanksListResponse, GetBanksQuery } from "../../@types/Banks"
 
 export const api = createApi({
   reducerPath: "haval-api",
@@ -146,6 +147,14 @@ export const api = createApi({
         },
       }),
     }),
+    getBanksList: builder.query<GetBanksListResponse, GetBanksQuery>({
+      query: ({auth_token})=>({
+        url: "paystack-services/get-banks-list",
+        headers: {
+          Authorization:  `Bearer ${auth_token}`
+        }
+      })
+    })
   }),
 });
 
@@ -160,5 +169,6 @@ export const {
   useSendTokenViaEmailMutation,
   useGetUnusedTokensQuery,
   useGetWalletInfoQuery,
-  useFundTokenWalletMutation
+  useFundTokenWalletMutation,
+  useGetBanksListQuery
 } = api;
