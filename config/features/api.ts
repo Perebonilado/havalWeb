@@ -29,7 +29,20 @@ import {
   FundTokenWalletPayload,
   FundTokenWalletResponse,
 } from "../../@types/Wallet";
-import { GetBanksListResponse, GetBanksQuery } from "../../@types/Banks"
+import {
+  GetBanksListResponse,
+  GetBanksQuery,
+  VerifyBankAccountQuery,
+  VerifyBankAccountResponse,
+} from "../../@types/Banks";
+import {
+  CreateTransferRecipientPayload,
+  CreateTransferRecipientResponse,
+  InitiateTransferPayload,
+  InitiateTransferResponse,
+  FinalizeTransferResponse,
+  FinalizeTransferPayload,
+} from "../../@types/BankTransfer";
 
 export const api = createApi({
   reducerPath: "haval-api",
@@ -140,7 +153,7 @@ export const api = createApi({
         body: {
           amount,
           initiator,
-          success_url
+          success_url,
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -148,13 +161,63 @@ export const api = createApi({
       }),
     }),
     getBanksList: builder.query<GetBanksListResponse, GetBanksQuery>({
-      query: ({auth_token})=>({
+      query: ({ auth_token }) => ({
         url: "paystack-services/get-banks-list",
         headers: {
-          Authorization:  `Bearer ${auth_token}`
-        }
-      })
-    })
+          Authorization: `Bearer ${auth_token}`,
+        },
+      }),
+    }),
+    verifyBankAccountNumber: builder.query<
+      VerifyBankAccountResponse,
+      VerifyBankAccountQuery
+    >({
+      query: ({ auth_token, account_number, bank_code }) => ({
+        url: `paystack-services/verify-account-number?account_number=${account_number}&bank_code=${bank_code}`,
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+      }),
+    }),
+    createTransferRecipient: builder.mutation<
+      CreateTransferRecipientResponse,
+      CreateTransferRecipientPayload
+    >({
+      query: ({ auth_token, body }) => ({
+        url: "paystack-services/create-transfer-recipient",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+        body: { ...body },
+      }),
+    }),
+    initiateTransfer: builder.mutation<
+      InitiateTransferResponse,
+      InitiateTransferPayload
+    >({
+      query: ({ auth_token, body }) => ({
+        url: "paystack-services/initiate-transfer",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+        body: { ...body },
+      }),
+    }),
+    finalizeTransfer: builder.mutation<
+      FinalizeTransferResponse,
+      FinalizeTransferPayload
+    >({
+      query: ({ auth_token, body }) => ({
+        url: "paystack-services/finalize-transfer",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+        body: { ...body },
+      }),
+    }),
   }),
 });
 
@@ -170,5 +233,9 @@ export const {
   useGetUnusedTokensQuery,
   useGetWalletInfoQuery,
   useFundTokenWalletMutation,
-  useGetBanksListQuery
+  useGetBanksListQuery,
+  useVerifyBankAccountNumberQuery,
+  useCreateTransferRecipientMutation,
+  useInitiateTransferMutation,
+  useFinalizeTransferMutation,
 } = api;

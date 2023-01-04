@@ -33,7 +33,7 @@ export interface VerifyBankAccountResponse {
   };
 }
 
-export interface VerifyBankAccountPayload {
+export interface VerifyBankAccountQuery {
   account_number: string | number;
   bank_code: string;
   auth_token: string

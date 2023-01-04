@@ -1,8 +1,10 @@
 export interface CreateTransferRecipientPayload {
-  name: string;
-  account_number: string | number;
-  bank_code: string;
   auth_token: string;
+  body: {
+    name: string;
+    account_number: string | number;
+    bank_code: string;
+  };
 }
 
 export interface CreateTransferRecipientResponse {
@@ -38,9 +40,11 @@ export interface CreateTransferRecipientResponse {
 }
 
 export interface InitiateTransferPayload {
-  amount: number;
-  recipient: string;
-  reason: string;
+  body: {
+    amount: number;
+    recipient: string;
+    reason: string;
+  };
   auth_token: string;
 }
 
@@ -97,4 +101,13 @@ export interface FinalizeTransferResponse {
       updatedAt: Date;
     };
   };
+}
+
+export interface FinalizeTransferPayload {
+  body: {
+    otp: string;
+    transfer_code: string;
+    amount: number;
+  };
+  auth_token: string
 }

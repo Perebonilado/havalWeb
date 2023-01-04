@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { Drawer } from "@mui/material";
+import { Drawer, Box } from "@mui/material";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,7 +18,7 @@ const AppDrawer: FC = () => {
       onClose={() => dispatch(closeDrawer())}
       anchor="right"
     >
-      {content}
+      <Box sx={{ padding: 2, width: "350px", maxWidth: "100%" }}>{content}</Box>
     </Drawer>
   );
 };

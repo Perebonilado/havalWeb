@@ -8,15 +8,26 @@ import VerifyOtp from "./VerifyOtp";
 const Withdrawal: FC = () => {
   const [otp, setOtp] = useState<string>("");
   const [transferCode, setTransferCode] = useState<string>("");
-  const [amount, setAmount] = useState<number | undefined>(undefined);
-  const [isVerifyOtp, setIsVerifyOtp] = useState<boolean>();
+  const [amount, setAmount] = useState<string>("");
+  const [isVerifyOtp, setIsVerifyOtp] = useState<boolean>(false);
 
   return (
     <Box>
       {isVerifyOtp ? (
-        <VerifyOtp otp={otp} setOtp={setOtp} />
+        <VerifyOtp
+          otp={otp}
+          setOtp={setOtp}
+          amount={amount}
+          setAmount={setAmount}
+          transferCode={transferCode}
+        />
       ) : (
-        <WithdrawalForm />
+        <WithdrawalForm
+          amount={amount}
+          setAmount={setAmount}
+          setIsVerifyOtp={setIsVerifyOtp}
+          setTransferCode={setTransferCode}
+        />
       )}
     </Box>
   );
