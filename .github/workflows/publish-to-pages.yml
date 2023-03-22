@@ -21,30 +21,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v3
-      - name: Detect package manager 👻
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "::set-output name=manager::yarn"
-            echo "::set-output name=command::install"
-            echo "::set-output name=runner::yarn"
-            exit 0
-          elif [ -f "${{ github.workspace }}/package.json" ]; then
-            echo "::set-output name=manager::npm"
-            echo "::set-output name=command::ci"
-            echo "::set-output name=runner::npx --no-install"
-            exit 0
-          else
-            echo "Unable to determine packager manager"
-            exit 1
-          fi
-      - name: Setup Node 🍉
-        uses: actions/setup-node@v3
-        with:
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          node-version: '16.10.0'
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        # cache: 'npm'
+    - name: Install yarn
+      run: npm install -g yarn
+
+    # - name: Get yarn cache directory path
+    #   id: yarn-cache-dir-path
+    #   run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    # - uses: actions/cache@v2
+    #   id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+    #   with:
+    #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+    #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-yarn-
+
+    - name: Install project dependencies
+      if: steps.yarn-cache.outputs.cache-hit != 'true' # Over here!
+      run: yarn 
+      
+    - name: build Yarn
+      run: yarn next build
+       
+    # - name: Yarn export
+    #   run: yarn next export
 
       - name: Setup Pages 🔧
         id: pages
